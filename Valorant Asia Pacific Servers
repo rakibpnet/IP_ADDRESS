@@ -1,0 +1,60 @@
+# NOTE FOR ISP#
+
+Valorant Asia Pacific Servers
+# Note most of the servers are AWS Global Accelerator anycast IP addresses
+# https://aws.amazon.com/global-accelerator/features/#Static_anycast_IP_addresses
+# https://en.wikipedia.org/wiki/Anycast
+# Last Update: 2023-01-09
+# ~CO7DFiRE
+
+# All Asia Pacific Servers
+13.248.193.101
+13.248.197.71
+13.248.205.128
+13.248.220.97
+151.106.248.1
+43.229.65.1
+75.2.49.107
+75.2.66.166
+75.2.69.178
+76.223.1.250
+76.223.71.142
+76.223.71.164
+76.223.72.224
+99.83.136.104
+99.83.157.116
+99.83.187.195
+
+# Singapore Only
+ # Riot (SG)
+151.106.248.1
+ # AWS (SG)
+13.248.193.101
+75.2.69.178
+76.223.1.250
+99.83.157.116
+
+# India Only
+99.83.136.104
+75.2.66.166
+13.248.197.71
+76.223.71.164
+
+# Server Ports
+UDP 7000:8000
+UDP 8180:8181
+TCP/UDP 8088
+
+
+
+
+For Valorant, they're using the AWS global accelerator, which is announced under AS16509 (i.e: NOT distinguisable from regular AWS/Amazon traffic).
+
+Unfortunately, given that the bulk of the problem is on the inbound path, and since BGP cannot operate at a port level, we will probably require one of the following:
+
+1. Increased preferences via peering at Equinix / SGIX Singapore to Amazon when being exported by your IIG. This will force Amazon to shun your ITC peers and send traffic directly via the IXP.
+    See https://docs.aws.amazon.com/directconnect/latest/UserGuide/routing-and-bgp.html, the most likely community is 7224:7200
+
+2. Set aside a /24 or two that are exclusively assigned to gaming / latency sensitive customers which are not announced to Airtel/Tata/ITC peers at all
+
+In addition, please set a SMW4/5 bound path of choice for AS16509.
